@@ -1,7 +1,8 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import *
 from django.db.models import Max,Min
+from django.template.loader import render_to_string
 # Create your views here.
 
 #Homepage
@@ -47,15 +48,17 @@ def search(request):
     data = Product.objects.filter(title__icontains=q).order_by('-id')
     return render(request, 'search.html', {'data': data})
 
-#Filter Products
-def filter_product(request):
-    colors = request.GET.getlist('color[]')
-    categories = request.GET.getlist('category[]')
-    sizes = request.GET.getlist('size[]')
-    filterProducts = ProductAttribute.objects.filter(
-        color__id__in = colors,
-        product__category__id__in = categories
-		# size__id__in=sizes,
-    )
-    return HttpResponse(filterProducts.query)
-    # return JsonResponse({'data':list(filterProducts)})
+#Filter data
+def filter_data(request):
+	colors=request.GET.getlist('color[]')
+	categories=request.GET.getlist('category[]')
+	sizes=request.GET.getlist('size[]')
+	allProducts=Product.objects.all().order_by('-id').distinct()
+	if len(colors)>0:
+		allProducts=allProducts.filter(productattribute__color__id__in=colors).distinct()
+	if len(categories)>0:
+		allProducts=allProducts.filter(category__id__in=categories).distinct()
+	if len(sizes)>0:
+		allProducts=allProducts.filter(productattribute__size__id__in=sizes).distinct()
+	t=render_to_string('ajax/product-list.html',{'data':allProducts})
+	return JsonResponse({'data':t})
