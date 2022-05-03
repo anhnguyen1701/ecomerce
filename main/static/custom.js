@@ -155,23 +155,44 @@ $(document).ready(function (e) {
         // End
     });
 
-    // Product Review Save
-    $('#addForm').submit(function () {
+    // Add wishlist
+    $(document).on('click', '.add-wishlist', function () {
+        var _pid = $(this).attr('data-product');
+        var _vm = $(this);
+        // Ajax
         $.ajax({
-            data: $(this).serialize(),
-            method: $(this).attr('method'),
-            url: $(this).attr('action'),
+            url: '/add-wishlist',
+            data: {
+                product: _pid,
+            },
             dataType: 'json',
             success: function (res) {
                 if (res.bool == true) {
-                    $('.ajaxRes').html('Data has been added.');
-                    // $('#reset').trigger('click');
-                    location.reload();
+                    _vm.addClass('disabled').removeClass('add-wishlist');
                 }
-                e.preventDefault();
             },
         });
-        e.preventDefault();
+        // EndAjax
     });
     // End
 });
+
+// Product Review Save
+$('#addForm').submit(function (e) {
+    $.ajax({
+        data: $(this).serialize(),
+        method: $(this).attr('method'),
+        url: $(this).attr('action'),
+        dataType: 'json',
+        success: function (res) {
+            if (res.bool == true) {
+                $('.ajaxRes').html('Data has been added.');
+                // $('#reset').trigger('click');
+                location.reload();
+            }
+            e.preventDefault();
+        },
+    });
+    e.preventDefault();
+});
+// End
