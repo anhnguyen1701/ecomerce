@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse,HttpResponse
 from .models import *
+from django.db.models.functions import ExtractMonth
 from django.db.models import Max,Min,Count,Avg
 from django.template.loader import render_to_string
 from .forms import *
@@ -263,9 +264,15 @@ def save_review(request,pid):
 
 
 # User Dashboard
+import calendar
 def my_dashboard(request):
-	return render(request, 'user/dashboard.html')
-
+	orders=CartOrder.objects.annotate(month=ExtractMonth('order_dt')).values('month').annotate(count=Count('id')).values('month','count')
+	monthNumber=[]
+	totalOrders=[]
+	for d in orders:
+		monthNumber.append(calendar.month_name[d['month']])
+		totalOrders.append(d['count'])
+	return render(request, 'user/dashboard.html',{'monthNumber':monthNumber,'totalOrders':totalOrders})
 # My Orders
 def my_orders(request):
 	orders=CartOrder.objects.filter(user=request.user).order_by('-id')
