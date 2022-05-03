@@ -139,7 +139,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL='home'
 LOGOUT_REDIRECT_URL='login'
 
-PAYPAL_RECEIVER_EMAIL = 'sb-c5xgx6555500@business.example.com'
+PAYPAL_RECEIVER_EMAIL = 'sb-emtks15818805@business.example.com'
 PAYPAL_TEST = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
