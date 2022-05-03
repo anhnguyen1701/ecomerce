@@ -1,15 +1,21 @@
 from email.mime import image
 from unicodedata import category
 from django.db import models
+from django.utils.html import mark_safe
 
 # Create your models here.
 #todo : delete brand
 
 #Banner
 class Banner(models.Model):
-    img=models.CharField(max_length=200)
+    img=models.ImageField(upload_to="banner_imgs/")
     alt_text=models.CharField(max_length=300)
 
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="100" />' % (self.img.url))
+
+    def __str__(self):
+        return self.alt_text
 
 #Category
 class Category(models.Model):

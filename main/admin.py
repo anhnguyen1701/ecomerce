@@ -8,6 +8,10 @@ admin.site.register(Brand)
 admin.site.register(Color)
 admin.site.register(Size)
 
+class BannerAdmin(admin.ModelAdmin):
+    list_display=('alt_text', 'image_tag')
+admin.site.register(Banner, BannerAdmin)
+
 class ProductAdmin(admin.ModelAdmin):
     list_display=('id', 'title','brand', 'color', 'size', 'status')
 admin.site.register(Product, ProductAdmin)
