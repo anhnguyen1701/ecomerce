@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import *
+from django.db.models import Max,Min
 # Create your views here.
 
 #Homepage
@@ -19,12 +20,16 @@ def product_list(request):
     cats = Product.objects.distinct().values('category__title', 'category__id')
     colors = ProductAttribute.objects.distinct().values('color__title', 'color__id', 'color__color_code')
     sizes = ProductAttribute.objects.distinct().values('size__title', 'size__id')
+    min_price = ProductAttribute.objects.aggregate(Min('price'))
+    max_price = ProductAttribute.objects.aggregate(Max('price'))
 
     return render(request, 'product_list.html', {
         'data': data,
         'cats': cats,
         'colors': colors,
-        'sizes': sizes
+        'sizes': sizes,
+        'min_price': min_price,
+        'max_price': max_price
     })
 
 # Product list according to Category
