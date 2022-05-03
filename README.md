@@ -19,3 +19,7 @@ secret: EEU8fea6Uu0luG9blP0QnYAWvReuI84CxZT5enQ1ax9NTK3H5k8zPiTGXf1114rKDkmizYZI
 - - reset password
 - - add email 
 - - deploy 
+
+---> done commit part-41-user-change-password-and-reset-password
+---> watch again add paypal & deploy video 
+// git: https://github.com/codeartisanlab
