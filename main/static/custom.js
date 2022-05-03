@@ -156,7 +156,7 @@ $(document).ready(function (e) {
     });
 
     // Product Review Save
-    $('#addForm').submit(function (e) {
+    $('#addForm').submit(function () {
         $.ajax({
             data: $(this).serialize(),
             method: $(this).attr('method'),
@@ -165,8 +165,10 @@ $(document).ready(function (e) {
             success: function (res) {
                 if (res.bool == true) {
                     $('.ajaxRes').html('Data has been added.');
-                    $('#reset').trigger('click');
+                    // $('#reset').trigger('click');
+                    location.reload();
                 }
+                e.preventDefault();
             },
         });
         e.preventDefault();
