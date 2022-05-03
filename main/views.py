@@ -1,7 +1,7 @@
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from .models import *
-from django.db.models import Max,Min
+from django.http import JsonResponse,HttpResponse
+from .models import Banner,Category,Product,ProductAttribute
+from django.db.models import Max,Min,Count
 from django.template.loader import render_to_string
 # Create your views here.
 
@@ -16,17 +16,6 @@ def category_list(request):
     data = Category.objects.all().order_by('-id')
     return render(request, 'category_list.html', {'data': data})
 
-# Product list
-def product_list(request):
-    data = Product.objects.all().order_by('-id')
-    min_price = ProductAttribute.objects.aggregate(Min('price'))
-    max_price = ProductAttribute.objects.aggregate(Max('price'))
-
-    return render(request, 'product_list.html', {
-        'data': data,
-        'min_price': min_price,
-        'max_price': max_price
-    })
 
 # Product list according to Category
 def category_product_list(request, cat_id):
@@ -66,3 +55,27 @@ def filter_data(request):
 		allProducts=allProducts.filter(productattribute__size__id__in=sizes).distinct()
 	t=render_to_string('ajax/product-list.html',{'data':allProducts})
 	return JsonResponse({'data':t})
+
+# Product list
+def product_list(request):
+	total_data=Product.objects.count()
+	data=Product.objects.all().order_by('-id')[:3]
+	min_price=ProductAttribute.objects.aggregate(Min('price'))
+	max_price=ProductAttribute.objects.aggregate(Max('price'))
+	return render(request,'product_list.html',
+		{
+			'data':data,
+			'total_data':total_data,
+			'min_price':min_price,
+			'max_price':max_price,
+		}
+		)
+
+#Load more
+def load_more_data(request):
+	offset=int(request.GET['offset'])
+	limit=int(request.GET['limit'])
+	print(offset, limit)
+	data = Product.objects.all().order_by('-id')[offset:offset+limit]
+	t=render_to_string('ajax/product-list.html', {'data': data})
+	return JsonResponse({'data': t})
