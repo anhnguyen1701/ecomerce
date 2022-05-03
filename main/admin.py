@@ -11,3 +11,9 @@ admin.site.register(Size)
 class ProductAdmin(admin.ModelAdmin):
     list_display=('id', 'title','brand', 'color', 'size', 'status')
 admin.site.register(Product, ProductAdmin)
+
+#productAttribute
+class ProductAttributeAdmin(admin.ModelAdmin):
+    list_display=('id','product','price', 'color', 'size')
+admin.site.register(ProductAttribute, ProductAttributeAdmin)
+
