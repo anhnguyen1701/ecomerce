@@ -26,3 +26,22 @@ def product_list(request):
         'colors': colors,
         'sizes': sizes
     })
+
+# Product list according to Category
+def category_product_list(request, cat_id):
+	category=Category.objects.get(id=cat_id)
+	data=Product.objects.filter(category=category).order_by('-id')
+	cats=Product.objects.distinct().values('category__title','category__id')
+	colors=ProductAttribute.objects.distinct().values('color__title','color__id','color__color_code')
+	sizes=ProductAttribute.objects.distinct().values('size__title','size__id')
+	return render(request,'category_product_list.html',{
+			'data':data,
+			'cats':cats,
+			'colors':colors,
+			'sizes':sizes,
+			})
+
+# Product detail
+def product_detail(request, slug, id):
+    product = Product.objects.get(id=id)
+    return render(request, 'product_detail.html', {'data': product})
