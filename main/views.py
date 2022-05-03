@@ -219,3 +219,15 @@ def payment_done(request):
 @csrf_exempt
 def payment_canceled(request):
 	return render(request, 'payment-fail.html')
+
+# Save Review
+def save_review(request,pid):
+	product=Product.objects.get(pk=pid)
+	user=request.user
+	review=ProductReview.objects.create(
+		user=user,
+		product=product,
+		review_text=request.POST['review_text'],
+		review_rating=request.POST['review_rating'],
+		)
+	return JsonResponse({'bool':True})

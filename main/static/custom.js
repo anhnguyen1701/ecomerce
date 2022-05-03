@@ -76,14 +76,14 @@ $(document).ready(function (e) {
     $('.product-price').text(_price);
 
     // Add to cart
-	$(document).on('click',".add-to-cart",function(){
-		var _vm=$(this);
-		var _index=_vm.attr('data-index');
-		var _qty=$(".product-qty-"+_index).val();
-		var _productId=$(".product-id-"+_index).val();
-		var _productImage=$(".product-image-"+_index).val();
-		var _productTitle=$(".product-title-"+_index).val();
-		var _productPrice=$(".product-price-"+_index).text();
+    $(document).on('click', '.add-to-cart', function () {
+        var _vm = $(this);
+        var _index = _vm.attr('data-index');
+        var _qty = $('.product-qty-' + _index).val();
+        var _productId = $('.product-id-' + _index).val();
+        var _productImage = $('.product-image-' + _index).val();
+        var _productTitle = $('.product-title-' + _index).val();
+        var _productPrice = $('.product-price-' + _index).text();
         // Ajax
         $.ajax({
             url: '/add-to-cart',
@@ -154,4 +154,22 @@ $(document).ready(function (e) {
         });
         // End
     });
+
+    // Product Review Save
+    $('#addForm').submit(function (e) {
+        $.ajax({
+            data: $(this).serialize(),
+            method: $(this).attr('method'),
+            url: $(this).attr('action'),
+            dataType: 'json',
+            success: function (res) {
+                if (res.bool == true) {
+                    $('.ajaxRes').html('Data has been added.');
+                    $('#reset').trigger('click');
+                }
+            },
+        });
+        e.preventDefault();
+    });
+    // End
 });
